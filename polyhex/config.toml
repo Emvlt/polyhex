@@ -1,0 +1,7 @@
+[palette]
+polygon = {0 = 'w'}
+edge_colour = 'k'
+node_marker = 'o'
+node_colour = 'r'
+[compatibility]
+0 = 0
