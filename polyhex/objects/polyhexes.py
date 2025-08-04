@@ -108,12 +108,12 @@ class Polyhex(object):
     def placeholder_hex(self, **kwargs):
         return Hexagon(
                     hex_coord_system=self.hex_coord_system,
-                    hex_centre_coord=kwargs['hex_centre_coord'],
+                    hex_centre_coord=kwargs.pop('hex_centre_coord', (0,0)),
                     outer_radius = self.radius,
                     top = self.top,
-                    node_feature=None,
+                    node_feature=kwargs.pop('node_feature', None),
                     vertex_feature=[None],
-                    edge_feature=kwargs['edge_feature'],
+                    edge_feature=kwargs.pop('edge_feature', [None]),
                     angle_orientation=self.angle_orientation
             )
     
@@ -215,10 +215,12 @@ class Polyhex(object):
 
     def draw(self, 
         scale = False,
-        save_path = './image.jpg'
+        save_path = './image.jpg',
+        buffer = False
         ):
         fig = plt.figure()
         axes = fig.gca()
+        axes.axis('off')
         for hex in self.hexagons.values():
             axes = hex.draw(axes, scale=scale)
         # Draw border
@@ -231,8 +233,12 @@ class Polyhex(object):
                 )
             axes = edge.draw(axes, scale=scale, color = 'grey', linewidth=5, alpha=0.7, zorder=200)
             
-        plt.savefig(save_path)
+        if buffer is not None:
+            plt.savefig(buffer, format='png', dpi=150, bbox_inches='tight')
+        else:
+            plt.savefig(save_path)
         plt.clf()
+        plt.close(fig)
 
     @hex_coord_system_dependent
     def compute_distance(self, hex1:Hexagon, hex2:Hexagon):        
@@ -259,6 +265,16 @@ class Polyhex(object):
                 area_indicator +=1
         return [distance, feature_indicator, area_indicator]
     
+    def index_to_edge_key(self, index):
+        for start_index, start_key in enumerate(self.polyhex_border):
+            if start_index == index:
+                return start_key
+            
+    def edge_key_to_index(self, edge_key):
+        for index, key in enumerate(self.polyhex_border):
+            if key == edge_key:
+                return index
+    
     def get_graph_edges(self):
         # index_to_edge mapping
         starts = []
@@ -277,3 +293,4 @@ class Polyhex(object):
         for (_, encoding, _, _) in self.polyhex_border.values():
             nodes.append(encoding)
         return nodes
+    
