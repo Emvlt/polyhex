@@ -3,6 +3,7 @@ import math
 import json
 import pathlib 
 from collections import defaultdict
+import matplotlib.pyplot as plt
 
 parent_path = pathlib.Path(__file__).parent.parent.resolve()
 with open(parent_path.joinpath('config.json'), 'rb') as fp:
@@ -15,6 +16,18 @@ from polyhex.objects import Node, Edge
 from polyhex.utilities import replicate_vector
 from polyhex.objects import hex_coord_system_dependent
 __all__ = ('Hexagon','DEFAULT_CONFIG_FILE')
+
+# Pointy top, axial ordering blablabla
+ADJENCY_TO_ROTATIONS_FUNCTIONS = {
+    # Edge index : N rotations of the neighbour hexagon to math edges
+    0 : [3,2,1,0,5,4],
+    1 : [4,3,2,1,0,5],
+    2 : [5,4,3,2,1,0],
+    3 : [0,5,4,3,2,1],
+    4 : [1,0,5,4,3,2],
+    5 : [2,1,0,5,4,3],
+
+}
 
 class Hexagon(object):
     
@@ -176,6 +189,7 @@ class Hexagon(object):
             raise ValueError(f'Length of edge_feature {edge_feature} can only be 1 or 6, got {len(edge_feature)}')
         self.edges = {}
         self.edges_to_feature = {}
+        self.edges_to_adjency = {}
         self.feature_to_edges = defaultdict(list)
         for i in range(6):
             feature = edge_feature[i]
@@ -188,6 +202,7 @@ class Hexagon(object):
                     hexagon=self
                     )
             self.edges[i] = edge
+            self.edges_to_adjency[edge.spatial_key] = ADJENCY_TO_ROTATIONS_FUNCTIONS[i]
             # Map the key to the feature
             self.edges_to_feature[edge.key] = feature
             # Map the feature to the keys
@@ -352,20 +367,37 @@ class Hexagon(object):
                     ends.append(j)
                     edge_attrs.append(1 if self.edges[i].feature == self.edges[j].feature else 0)
         return  [starts, ends, edge_attrs]
-    
-    def draw(self, axes,
-        scale = False
+
+    def draw(self, axes = None,
+        scale = False, buffer=None
         ):
-        axes = self.centre_node.draw(
-            axes, 
-            scale=scale
-            )
-        for i in range(6):
-            axes = self.get_edge(i).draw(
-                axes,
+        if buffer is not None:
+            fig = plt.figure()
+            axes = fig.gca()
+            axes.axis('off')
+            axes = self.centre_node.draw(
+                axes, 
                 scale=scale
                 )
-        return axes
+            for i in range(6):
+                axes = self.get_edge(i).draw(
+                    axes,
+                    scale=scale
+                    )
+            plt.savefig(buffer, format='png', dpi=150, bbox_inches='tight')
+            plt.clf()
+            plt.close(fig)
+        else:
+            axes = self.centre_node.draw(
+                axes, 
+                scale=scale
+                )
+            for i in range(6):
+                axes = self.get_edge(i).draw(
+                    axes,
+                    scale=scale
+                    )
+            return axes
 
     def __str__(self):
         # centre_node
