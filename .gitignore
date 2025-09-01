@@ -7,8 +7,8 @@ __pycache__/
 
 *.png
 
-polyhex/training
-polyhex/networks
-polyhex/environment
-polyhex/rules
-polyhex/tests
+polyhex/training/
+polyhex/networks/
+polyhex/environment/
+polyhex/rules/
+polyhex/tests/
