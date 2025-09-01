@@ -6,3 +6,9 @@ __pycache__/
 *$py.class
 
 *.png
+
+polyhex/training
+polyhex/networks
+polyhex/environment
+polyhex/rules
+polyhex/tests

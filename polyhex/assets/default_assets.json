@@ -1,0 +1,59 @@
+{
+    "render":{
+        "HexagonCentre" : {
+            "feature" : {
+                "placeholder" : {
+                    "facecolor":"white",
+                    "edgecolor" : "tab:grey",
+                    "zorder" : 10
+                }                
+            }
+        },
+        "HexagonVertex" : {
+            "feature" : {
+                "placeholder" : {
+                    "color" :"green",
+                    "marker" : "+",
+                    "markersize" : 20,
+                    "zorder" : 10
+                }
+            }
+        },
+        "HexagonEdge" : {
+            "feature" : {
+                "placeholder" : {
+                    "line":{
+                        "color" : "black"
+                        },
+                    "triangle":{
+                        "color" : "green"
+                    }
+                }      
+            }
+        }
+    },
+    "compatibility" : {
+        "HexagonCentre" : {"placeholder" : ["placeholder"]},
+        "HexagonVertex" : {"placeholder" : ["placeholder"]},
+        "HexagonEdge" : {"placeholder" : ["placeholder"]}
+    },
+    "encoding" : {
+        "HexagonCentre" : {
+            "feature": {"placeholder":1},
+            "token": {"placeholder":1}
+        },
+        "HexagonVertex" : {
+            "feature": {"placeholder":1},
+            "token": {"placeholder":1}
+        },
+        "HexagonEdge" : {
+            "feature": {"placeholder":1},
+            "token": {"placeholder":1}
+        },
+        "Hexagon" : {
+            "feature": {"placeholder":1},
+            "token": {"placeholder":1}
+        }
+    }
+    
+}
