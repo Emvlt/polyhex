@@ -131,7 +131,7 @@ class Node(ABC):
 
     def render(self, axes: Artist, **kwargs):
         """The `render` method is a public method of the `Node` abstract class.
-
+        It differs from ``draw`` as it requires a matplotlib.axe and returns a matplotlib.axe
         Args:
             axes (Artist): matplotlib.Artist on which to draw
             kwargs : keyword dict that can replace the default rendering options defined in the assets.
