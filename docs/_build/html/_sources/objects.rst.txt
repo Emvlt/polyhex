@@ -1,0 +1,9 @@
+.. automodule:: polyhex.objects.edges
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: polyhex.objects.nodes
+   :members:
+   :undoc-members:
+   :show-inheritance:

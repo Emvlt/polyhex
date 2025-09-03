@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hexagons &mdash; PolyHex 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Nodes" href="nodes.html" />
+    <link rel="prev" title="Edges" href="edges.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PolyHex
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="decorators.html">Decorators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="edges.html">Edges</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hexagons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon"><code class="docutils literal notranslate"><span class="pre">Hexagon</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.add_token"><code class="docutils literal notranslate"><span class="pre">Hexagon.add_token()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.adjency"><code class="docutils literal notranslate"><span class="pre">Hexagon.adjency</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.assets"><code class="docutils literal notranslate"><span class="pre">Hexagon.assets</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.distance"><code class="docutils literal notranslate"><span class="pre">Hexagon.distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.draw"><code class="docutils literal notranslate"><span class="pre">Hexagon.draw()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.edge_feature"><code class="docutils literal notranslate"><span class="pre">Hexagon.edge_feature</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.encoding"><code class="docutils literal notranslate"><span class="pre">Hexagon.encoding</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.get_edge_adjency"><code class="docutils literal notranslate"><span class="pre">Hexagon.get_edge_adjency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.get_vertex_adjency"><code class="docutils literal notranslate"><span class="pre">Hexagon.get_vertex_adjency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.hex_coord"><code class="docutils literal notranslate"><span class="pre">Hexagon.hex_coord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.hex_coord_system"><code class="docutils literal notranslate"><span class="pre">Hexagon.hex_coord_system</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.hexagon_feature"><code class="docutils literal notranslate"><span class="pre">Hexagon.hexagon_feature</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.is_compatible"><code class="docutils literal notranslate"><span class="pre">Hexagon.is_compatible()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.radius"><code class="docutils literal notranslate"><span class="pre">Hexagon.radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.render"><code class="docutils literal notranslate"><span class="pre">Hexagon.render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.token"><code class="docutils literal notranslate"><span class="pre">Hexagon.token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.top"><code class="docutils literal notranslate"><span class="pre">Hexagon.top</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.vertex_feature"><code class="docutils literal notranslate"><span class="pre">Hexagon.vertex_feature</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.hexagons.Hexagon.vertex_orientation"><code class="docutils literal notranslate"><span class="pre">Hexagon.vertex_orientation</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="polyhexes.html">Polyhexes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PolyHex</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">&lt;no title&gt;</a></li>
+      <li class="breadcrumb-item active">Hexagons</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/objects/hexagons.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-polyhex.objects.hexagons">
+<span id="hexagons"></span><h1>Hexagons<a class="headerlink" href="#module-polyhex.objects.hexagons" title="Link to this heading"></a></h1>
+<p>Module for the Hexagons.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polyhex.objects.hexagons.</span></span><span class="sig-name descname"><span class="pre">Hexagon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hex_coord_system:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'axial'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hex_coord:</span> <span class="pre">~typing.Tuple[int]</span> <span class="pre">=</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'pointy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_orientation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'clockwise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assets:</span> <span class="pre">~typing.Dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hexagon_feature:</span> <span class="pre">~numpy._typing._array_like._Buffer</span> <span class="pre">|</span> <span class="pre">~numpy._typing._array_like._SupportsArray[~numpy.dtype[~typing.Any]]</span> <span class="pre">|</span> <span class="pre">~numpy._typing._nested_sequence._NestedSequence[~numpy._typing._array_like._SupportsArray[~numpy.dtype[~typing.Any]]]</span> <span class="pre">|</span> <span class="pre">complex</span> <span class="pre">|</span> <span class="pre">bytes</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~numpy._typing._nested_sequence._NestedSequence[complex</span> <span class="pre">|</span> <span class="pre">bytes</span> <span class="pre">|</span> <span class="pre">str]</span> <span class="pre">=</span> <span class="pre">'placeholder'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_feature:</span> <span class="pre">~numpy._typing._array_like._Buffer</span> <span class="pre">|</span> <span class="pre">~numpy._typing._array_like._SupportsArray[~numpy.dtype[~typing.Any]]</span> <span class="pre">|</span> <span class="pre">~numpy._typing._nested_sequence._NestedSequence[~numpy._typing._array_like._SupportsArray[~numpy.dtype[~typing.Any]]]</span> <span class="pre">|</span> <span class="pre">complex</span> <span class="pre">|</span> <span class="pre">bytes</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~numpy._typing._nested_sequence._NestedSequence[complex</span> <span class="pre">|</span> <span class="pre">bytes</span> <span class="pre">|</span> <span class="pre">str]</span> <span class="pre">=</span> <span class="pre">'placeholder'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_feature:</span> <span class="pre">~numpy._typing._array_like._Buffer</span> <span class="pre">|</span> <span class="pre">~numpy._typing._array_like._SupportsArray[~numpy.dtype[~typing.Any]]</span> <span class="pre">|</span> <span class="pre">~numpy._typing._nested_sequence._NestedSequence[~numpy._typing._array_like._SupportsArray[~numpy.dtype[~typing.Any]]]</span> <span class="pre">|</span> <span class="pre">complex</span> <span class="pre">|</span> <span class="pre">bytes</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~numpy._typing._nested_sequence._NestedSequence[complex</span> <span class="pre">|</span> <span class="pre">bytes</span> <span class="pre">|</span> <span class="pre">str]</span> <span class="pre">=</span> <span class="pre">'placeholder'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for creating a Hexagon.
+See <a class="reference external" href="https://www.redblobgames.com/grids/hexagons/">https://www.redblobgames.com/grids/hexagons/</a> for a great explanation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hex_coord_system</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The hexagonal coordinate system. It can be <cite>offset</cite>, <cite>cube</cite>, <cite>axial</cite> or <cite>doubled`Defaults to `axial</cite>.</p></li>
+<li><p><strong>hex_coord</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List[int]</span></code>) – The coordinates of the Hexagon in the given hexagonal coordinate system. Defaults to the centre coordinate <cite>[0,0]</cite>.</p></li>
+<li><p><strong>top</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The top of the hexagon. Can only be <cite>pointy</cite> of <cite>flat</cite>. Defaults to <cite>pointy</cite>.</p></li>
+<li><p><strong>radius</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int|float</span></code>) – The radius’ value. For PolyHex, the <cite>radius</cite> refers to the radius of the circle to which all the hexagon’s vertices belong.Defaults to <cite>1</cite>.</p></li>
+<li><p><strong>vertex_orientation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The vertex orientation. It is can be <cite>clockwise</cite> or <cite>couterclockwise</cite>. Important note: For hexagons with <cite>pointy</cite> top, We start counting the vertices by starting with the one at 12.00. For hexagons with <cite>flat</cite> top, We start counting the vertices by starting with the one at 3.00 Defaults to <cite>clockwise</cite>.</p></li>
+<li><p><strong>assets</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) – A big dictionnary holding all the information about rendering, token compatibility, etc, etc. Defaults to the defaults_assets.json file.</p></li>
+<li><p><strong>hexagon_feature</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayLike</span></code>) – The feature of the hexagon as an entity. Defaults to 0.</p></li>
+<li><p><strong>vertex_feature</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayLike</span></code>) – The feature of the vertices Note: there is a bit of a misnomer here. There are 6 vertices per hexagon, so the attribute name should be ‘vertices_feature’ and an ArrayLike of size 6 should be the default. For ease of use, we deliberately offer to define all the vertices’ feature by providing a single default argument, replicated accross all edges. However, if an ArrayLike is provided, the features will be allocated in the order defined by <cite>vertex_orientation</cite>. It also MUST be hashable by a <cite>frozenset</cite>. Defaults to 0.</p></li>
+<li><p><strong>edge_feature</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayLike</span></code>) – The feature of the edges Note: there is a bit of a misnomer here. There are 6 edges per hexagon, so the attribute name should be ‘edges_feature’ and an ArrayLike of size 6 should be the default. For ease of use, we deliberately offer to define all the edges’ feature by providing a single default argument, replicated accross all edges. However, if an ArrayLike is provided, the features will be allocated in the order defined by <cite>vertex_orientation</cite>. It also MUST be hashable by a <cite>frozenset</cite>. Defaults to 0.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.add_token">
+<span class="sig-name descname"><span class="pre">add_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.add_token" title="Link to this definition"></a></dt>
+<dd><p>Method to add a token on a Hexagon.
+Under the hood, it adds the token to the HexagonCentre’s</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_token</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – str identifier of the token.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.adjency">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">adjency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.adjency" title="Link to this definition"></a></dt>
+<dd><p>Get a hexagon adjency, i.e the coordinates of neighbouring hexagons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NotImplementedError</strong> – is only implemented for the <cite>axial</cite> coordinates system.</p></li>
+<li><p><strong>NotImplementedError</strong> – is only implemented for the <cite>clockwise</cite> vertex ordering.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[(coord_hex_0), …, (coord_hex_5)]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.assets">
+<span class="sig-name descname"><span class="pre">assets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.assets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.distance">
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidian'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.distance" title="Link to this definition"></a></dt>
+<dd><p>Method to compute the distance between two <code class="docutils literal notranslate"><span class="pre">Hexagon</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">_type_</span></code>) – other <code class="docutils literal notranslate"><span class="pre">Hexagon</span></code></p></li>
+<li><p><strong>kwd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <em>optional</em>) – Identifier of the distance. Defaults to “euclidian”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is currently only implemented for the <cite>euclidian</cite> distance.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float distance value</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.draw" title="Link to this definition"></a></dt>
+<dd><p>Method to draw a hexagon.</p>
+<p>Creates a matplotlib.axis and calls <code class="docutils literal notranslate"><span class="pre">render</span></code> on it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>buffer_object</strong> – savepath or buffer for image saving</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.edge_feature">
+<span class="sig-name descname"><span class="pre">edge_feature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">_Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'placeholder'</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.edge_feature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.encoding">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">encoding</span></span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.encoding" title="Link to this definition"></a></dt>
+<dd><p>Returns the Hexagon’s encoding.
+The default version returns the HexagonCentre’s encoding</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>vector representation of the Hexagon’s attribute</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.get_edge_adjency">
+<span class="sig-name descname"><span class="pre">get_edge_adjency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.get_edge_adjency" title="Link to this definition"></a></dt>
+<dd><p>Method to get the edge adjency, i.e the neighbouring edges, in and outside of the <code class="docutils literal notranslate"><span class="pre">Hexagon</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertex</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">HexagonEdge</span></code>) – edge to get the adjency of.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>length-4 size adjency coordinates</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.get_vertex_adjency">
+<span class="sig-name descname"><span class="pre">get_vertex_adjency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.get_vertex_adjency" title="Link to this definition"></a></dt>
+<dd><p>Method to get the vertex adjency, i.e the neighbouring vertices, in and outside of the <code class="docutils literal notranslate"><span class="pre">Hexagon</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertex</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">HexagonVertex</span></code>) – vertex to get the adjency of.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>length-3 size adjency coordinates</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.hex_coord">
+<span class="sig-name descname"><span class="pre">hex_coord</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0,</span> <span class="pre">0)</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.hex_coord" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.hex_coord_system">
+<span class="sig-name descname"><span class="pre">hex_coord_system</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'axial'</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.hex_coord_system" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.hexagon_feature">
+<span class="sig-name descname"><span class="pre">hexagon_feature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">_Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'placeholder'</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.hexagon_feature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.is_compatible">
+<span class="sig-name descname"><span class="pre">is_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.is_compatible" title="Link to this definition"></a></dt>
+<dd><p>Method to assess if the properties of a Hexagon are compatible with the properties of another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code></a>) – Other Hexagon to compare it with</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean result of the compatibility assessment</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.radius" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.render" title="Link to this definition"></a></dt>
+<dd><p>Method to render a hexagon.</p>
+<p>Unlike <code class="docutils literal notranslate"><span class="pre">draw</span></code>, it requires a matplotlib axis object.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.token">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.token" title="Link to this definition"></a></dt>
+<dd><p>Returns the hexagon’s token
+Under the hood, it returns the HexagonCentre’s token</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>vector representation of the Hexagon’s attribute</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.top">
+<span class="sig-name descname"><span class="pre">top</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pointy'</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.top" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.vertex_feature">
+<span class="sig-name descname"><span class="pre">vertex_feature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">_Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'placeholder'</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.vertex_feature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polyhex.objects.hexagons.Hexagon.vertex_orientation">
+<span class="sig-name descname"><span class="pre">vertex_orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'clockwise'</span></em><a class="headerlink" href="#polyhex.objects.hexagons.Hexagon.vertex_orientation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="edges.html" class="btn btn-neutral float-left" title="Edges" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nodes.html" class="btn btn-neutral float-right" title="Nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Emilien Valat.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

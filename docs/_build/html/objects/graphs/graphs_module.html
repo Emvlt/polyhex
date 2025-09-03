@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Module &mdash; PolyHex 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PolyHex
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../decorators.html">Decorators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../edges.html">Edges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hexagons.html">Hexagons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../polyhexes.html">Polyhexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exporters/pyg_exporter.html">PyG Exporter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Graph Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph"><code class="docutils literal notranslate"><span class="pre">EdgeBorderGraph</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph.add"><code class="docutils literal notranslate"><span class="pre">EdgeBorderGraph.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph.append"><code class="docutils literal notranslate"><span class="pre">EdgeBorderGraph.append()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph.remove"><code class="docutils literal notranslate"><span class="pre">EdgeBorderGraph.remove()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.EdgeGraph"><code class="docutils literal notranslate"><span class="pre">EdgeGraph</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.EdgeGraph.append"><code class="docutils literal notranslate"><span class="pre">EdgeGraph.append()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph.__init__"><code class="docutils literal notranslate"><span class="pre">Graph.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph.append"><code class="docutils literal notranslate"><span class="pre">Graph.append()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonBorderGraph"><code class="docutils literal notranslate"><span class="pre">HexagonBorderGraph</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonBorderGraph.add"><code class="docutils literal notranslate"><span class="pre">HexagonBorderGraph.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonBorderGraph.append"><code class="docutils literal notranslate"><span class="pre">HexagonBorderGraph.append()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonGraph"><code class="docutils literal notranslate"><span class="pre">HexagonGraph</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonGraph.append"><code class="docutils literal notranslate"><span class="pre">HexagonGraph.append()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.VertexGraph"><code class="docutils literal notranslate"><span class="pre">VertexGraph</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.VertexGraph.append"><code class="docutils literal notranslate"><span class="pre">VertexGraph.append()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PolyHex</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">&lt;no title&gt;</a></li>
+      <li class="breadcrumb-item active">Graph Module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/objects/graphs/graphs_module.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-polyhex.objects.graphs.graphs_module">
+<span id="graph-module"></span><h1>Graph Module<a class="headerlink" href="#module-polyhex.objects.graphs.graphs_module" title="Link to this heading"></a></h1>
+<p>Module that defines the abstract Graph class and different classes of Graphs that inherit from it</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.EdgeBorderGraph">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polyhex.objects.graphs.graphs_module.</span></span><span class="sig-name descname"><span class="pre">EdgeBorderGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EdgeBorderGraph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph" title="polyhex.objects.graphs.graphs_module.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a></p>
+<p>Graph of polyhex edges border</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.EdgeBorderGraph.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexagon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hexagons.html#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><span class="pre">Hexagon</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../edges.html#polyhex.objects.edges.HexagonEdge" title="polyhex.objects.edges.HexagonEdge"><span class="pre">HexagonEdge</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph.add" title="Link to this definition"></a></dt>
+<dd><p>Internal helper function to clarify the append code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hexagon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code>) – Hexagon to append to the border</p></li>
+<li><p><strong>edge</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">HexagonEdge</span></code>) – Edge considered</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.EdgeBorderGraph.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexagon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hexagons.html#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><span class="pre">Hexagon</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph.append" title="Link to this definition"></a></dt>
+<dd><p>Append method of the EdgeBorderGraph.
+The border of a polyhex can be defined by its Edges of by its Hexagons. For Polyhex with varying edge features, it is important to know what edges are on the border</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexagon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code>) – Hexagon to append to the graph.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.EdgeBorderGraph.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexagon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hexagons.html#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><span class="pre">Hexagon</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../edges.html#polyhex.objects.edges.HexagonEdge" title="polyhex.objects.edges.HexagonEdge"><span class="pre">HexagonEdge</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.EdgeBorderGraph.remove" title="Link to this definition"></a></dt>
+<dd><p>Internal helper function to clarify the append code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hexagon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code>) – Hexagon to append to the border</p></li>
+<li><p><strong>edge</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">HexagonEdge</span></code>) – Edge considered</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.EdgeGraph">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polyhex.objects.graphs.graphs_module.</span></span><span class="sig-name descname"><span class="pre">EdgeGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EdgeGraph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.EdgeGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph" title="polyhex.objects.graphs.graphs_module.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a></p>
+<p>Graph of polyhex edges</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.EdgeGraph.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexagon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hexagons.html#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><span class="pre">Hexagon</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.EdgeGraph.append" title="Link to this definition"></a></dt>
+<dd><p>Append method of the EdgeGraph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexagon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code>) – Hexagon of which edges to append to the graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.Graph">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polyhex.objects.graphs.graphs_module.</span></span><span class="sig-name descname"><span class="pre">Graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.Graph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract Graph class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.Graph.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.Graph.__init__" title="Link to this definition"></a></dt>
+<dd><p>Constructor for a graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of the graph</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>By default, a graph has:</dt><dd><p>name (str)     : name of the Graph
+n_nodes (int)  : number of nodes
+nodes (dict)   : dictionnary with spatial coordinates as keys and objects (Hexagon, Edge…) as values. It refers to the nodes of the graph.
+weights (dict) : dictionnary with spatial coordinates as keys and a list of objects (Hexagon, Edge…) as values. It refers to the connexions between the nodes of the graph
+nodes (dict)   : the dictionnary with spatial coordinates as keys and integers as values. It refers to the indexing of each node in the graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.Graph.append">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.Graph.append" title="Link to this definition"></a></dt>
+<dd><p>Append method for the Graph</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.HexagonBorderGraph">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polyhex.objects.graphs.graphs_module.</span></span><span class="sig-name descname"><span class="pre">HexagonBorderGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HexagonBorderGraph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.HexagonBorderGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph" title="polyhex.objects.graphs.graphs_module.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a></p>
+<p>Graph of polyhex hexagons border</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.HexagonBorderGraph.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polyhex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../polyhexes.html#polyhex.objects.polyhexes.Polyhex" title="polyhex.objects.polyhexes.Polyhex"><span class="pre">Polyhex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">adj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hexagon_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonGraph" title="polyhex.objects.graphs.graphs_module.HexagonGraph"><span class="pre">HexagonGraph</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.HexagonBorderGraph.add" title="Link to this definition"></a></dt>
+<dd><p>Helper function for clarifying the <cite>append</cite> method of the HexagonBorderGraph class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>polyhex</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Polyhex</span></code>) – the polyhex considered. The border cannot be defined without the polyhex as it creates placeholder nodes.</p></li>
+<li><p><strong>adj</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple[int]</span></code>) – One of the adjency coordinate of the considered hexagon</p></li>
+<li><p><strong>hexagon_graph</strong> (<a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonGraph" title="polyhex.objects.graphs.graphs_module.HexagonGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">HexagonGraph</span></code></a>) – the hexagon graph representing the polyhex. The border cannot be defined without the HexagonGraph.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.HexagonBorderGraph.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexagon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hexagons.html#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><span class="pre">Hexagon</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hexagon_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonGraph" title="polyhex.objects.graphs.graphs_module.HexagonGraph"><span class="pre">HexagonGraph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">polyhex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../polyhexes.html#polyhex.objects.polyhexes.Polyhex" title="polyhex.objects.polyhexes.Polyhex"><span class="pre">Polyhex</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.HexagonBorderGraph.append" title="Link to this definition"></a></dt>
+<dd><p>Append method of the EdgeBorderGraph.
+The border of a polyhex can be defined by its Edges of by its Hexagons. When considering the Hexagon border, it is important to consider the following:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>the hexagon border is defined only against a hexagon graph</p></li>
+<li><p>the hexagon border is made of placeholder hexagons, that look like the ones the polyhex would expect. This is why a <cite>polyhex</cite> object is required.</p></li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hexagon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code>) – The hexagon to append to the border.</p></li>
+<li><p><strong>hexagon_graph</strong> (<a class="reference internal" href="#polyhex.objects.graphs.graphs_module.HexagonGraph" title="polyhex.objects.graphs.graphs_module.HexagonGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">HexagonGraph</span></code></a>) – The hexagon graph to build the border against.</p></li>
+<li><p><strong>polyhex</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Polyhex</span></code>) – The polyhex considered</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.HexagonGraph">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polyhex.objects.graphs.graphs_module.</span></span><span class="sig-name descname"><span class="pre">HexagonGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HexagonGraph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.HexagonGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph" title="polyhex.objects.graphs.graphs_module.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a></p>
+<p>Graph of polyhex hexagons</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.HexagonGraph.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexagon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hexagons.html#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><span class="pre">Hexagon</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.HexagonGraph.append" title="Link to this definition"></a></dt>
+<dd><p>Append method of the HexagonGraph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexagon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code>) – Hexagon to append to the graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.VertexGraph">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polyhex.objects.graphs.graphs_module.</span></span><span class="sig-name descname"><span class="pre">VertexGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VertexGraph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.VertexGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polyhex.objects.graphs.graphs_module.Graph" title="polyhex.objects.graphs.graphs_module.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a></p>
+<p>Graph of polyhex vertices</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polyhex.objects.graphs.graphs_module.VertexGraph.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexagon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hexagons.html#polyhex.objects.hexagons.Hexagon" title="polyhex.objects.hexagons.Hexagon"><span class="pre">Hexagon</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polyhex.objects.graphs.graphs_module.VertexGraph.append" title="Link to this definition"></a></dt>
+<dd><p>Append method of the VertexGraph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexagon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hexagon</span></code>) – Hexagon of which vertices to append to the graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Emilien Valat.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

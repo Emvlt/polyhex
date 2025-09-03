@@ -20,9 +20,7 @@ dependencies = [
     # List your project's dependencies here, e.g.:
     # "requests>=2.20.0",
     "matplotlib",
-    "pandas",
-    "gymnasium",
     "numpy",
-    "pygame",
-    "scipy"
+    "scipy",
+    "torch_geometric"
 ]
