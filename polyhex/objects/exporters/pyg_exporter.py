@@ -8,6 +8,8 @@ import torch
 from torch_geometric.data import HeteroData, Data
 from polyhex.objects.graphs import Graph
 
+__all__ = ('PyGExporter',)
+
 
 class PyGExporter:
     """
