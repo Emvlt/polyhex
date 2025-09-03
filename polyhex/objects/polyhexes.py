@@ -116,7 +116,6 @@ class Polyhex(object):
             raise NotImplementedError(f'The tiling can only be `rectangular` or `tilted`, not {name}.')
 
         polyhex = cls()
-        print(coordinates)
         polyhex._create_from_list([Hexagon(hex_coord=c) for c in coordinates], hypergraph)
         
         return polyhex
