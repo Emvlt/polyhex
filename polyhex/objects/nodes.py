@@ -216,7 +216,7 @@ class HexagonCentre(Node):
             kwd (str, optional): Identifier of the distance. Defaults to "euclidian".
 
         Raises:
-            NotImplementedError: This is currently not implemented for any distance but the `euclidian`.
+            NotImplementedError: This method is currently only implemented for the `euclidian` distance.
 
         Returns:
             np.ndarray: float distance value

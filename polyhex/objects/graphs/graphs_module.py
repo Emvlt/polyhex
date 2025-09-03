@@ -2,6 +2,8 @@
 Module that defines the abstract Graph class and different classes of Graphs that inherit from it
 """
 # pylint: disable=arguments-differ
+# pylint: line-too-long
+# pylint: too-few-public-methods
 
 from abc import ABC, abstractmethod
 from typing import Dict, Tuple
