@@ -1,329 +1,214 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import math 
-import json
-import pathlib 
-from collections import defaultdict
-import matplotlib.pyplot as plt
+from dataclasses import dataclass, field
 
-parent_path = pathlib.Path(__file__).parent.parent.resolve()
-with open(parent_path.joinpath('config.json'), 'rb') as fp:
-    DEFAULT_CONFIG_FILE = dict(json.load(fp))
-
-import numpy as np
 from numpy.typing import ArrayLike
+import matplotlib.pyplot as plt
+from scipy.spatial import distance
 
-from polyhex.objects import Node, Edge
+from polyhex.assets import loaders
 from polyhex.utilities import replicate_vector
-from polyhex.objects import hex_coord_system_dependent
-__all__ = ('Hexagon','DEFAULT_CONFIG_FILE')
+from polyhex.objects.decorators import hex_coord_system_dependent, top_dependent, vertex_orientation_dependent
+__all__ = ('Hexagon',)
 
 # Pointy top, axial ordering blablabla
 ADJENCY_TO_ROTATIONS_FUNCTIONS = {
-    # Edge index : N rotations of the neighbour hexagon to math edges
+    # Edge index : N rotations of the neighbour hexagon to math edges.
+    # Example: consider a hexagon at (q,r) with a pointy top and clockwise vertex ordering and its first neighbour, at position (q+1, r-1). In order to match the first edge of (q,r) to the first edge of (q+1, r-1), the latter has to be rotated 3 times
     0 : [3,2,1,0,5,4],
     1 : [4,3,2,1,0,5],
     2 : [5,4,3,2,1,0],
     3 : [0,5,4,3,2,1],
     4 : [1,0,5,4,3,2],
     5 : [2,1,0,5,4,3],
-
 }
 
+@dataclass
 class Hexagon(object):
-    
-    def __init__(
-            self,
-            hex_coord_system  : str = 'axial',
-            hex_centre_coord : List[int] = [0,0],
-            outer_radius : float = 1,
-            top  : str = 'pointy',
-            node_feature    : ArrayLike = 0,
-            vertex_feature  : ArrayLike = [0],
-            edge_feature    : ArrayLike = [0],
-            angle_orientation : str = 'clockwise',
-            config_file : Dict = None
-            ):
-        if config_file is None: 
-            self.config_file = DEFAULT_CONFIG_FILE
-        else:
-            self.config_file = config_file
-        self._check_hex_coord(hex_coord_system)
-        self._hex_coord_system = hex_coord_system
+    """Base class for creating a Hexagon. 
+    See https://www.redblobgames.com/grids/hexagons/ for a great explanation
 
-        self._check_hex_centre_coord(hex_centre_coord)
+    Arguments:
+        hex_coord_system (str) : The hexagonal coordinate system. It can be `offset`, `cube`, `axial` or `doubled`Defaults to `axial`.
+        hex_coord (List[int])  : The coordinates of the Hexagon in the given hexagonal coordinate system. Defaults to the centre coordinate `[0,0]`.
+        top (str) : The top of the hexagon. Can only be `pointy` of `flat`. Defaults to `pointy`.
+        radius (int|float) : The radius' value. For PolyHex, the `radius` refers to the radius of the circle to which all the hexagon's vertices belong.Defaults to `1`.
+        vertex_orientation (str) : The vertex orientation. It is can be `clockwise` or `couterclockwise`. Important note: For hexagons with `pointy` top, We start counting the vertices by starting with the one at 12.00. For hexagons with `flat` top, We start counting the vertices by starting with the one at 3.00 Defaults to `clockwise`.
+        assets (Dict) : A big dictionnary holding all the information about rendering, token compatibility, etc, etc. Defaults to the defaults_assets.json file.
+        hexagon_feature   (ArrayLike) : The feature of the hexagon as an entity. Defaults to 0.
+        vertex_feature (ArrayLike) : The feature of the vertices Note: there is a bit of a misnomer here. There are 6 vertices per hexagon, so the attribute name should be 'vertices_feature' and an ArrayLike of size 6 should be the default. For ease of use, we deliberately offer to define all the vertices' feature by providing a single default argument, replicated accross all edges. However, if an ArrayLike is provided, the features will be allocated in the order defined by `vertex_orientation`. It also MUST be hashable by a `frozenset`. Defaults to 0.
+        edge_feature   (ArrayLike) : The feature of the edges Note: there is a bit of a misnomer here. There are 6 edges per hexagon, so the attribute name should be 'edges_feature' and an ArrayLike of size 6 should be the default. For ease of use, we deliberately offer to define all the edges' feature by providing a single default argument, replicated accross all edges. However, if an ArrayLike is provided, the features will be allocated in the order defined by `vertex_orientation`. It also MUST be hashable by a `frozenset`. Defaults to 0.
+    """
+    hex_coord_system : str = 'axial'
+    hex_coord : Tuple[int] = (0,0)
+    top : str = 'pointy'
+    radius : int | float = 1 
+    vertex_orientation : str = 'clockwise'
+    assets : Dict = field(default_factory=lambda: loaders.load_assets('default_assets.json'))
+    hexagon_feature : ArrayLike = 'placeholder'
+    vertex_feature  : ArrayLike = 'placeholder'
+    edge_feature    : ArrayLike = 'placeholder'
 
-        self._check_top(top)
-        self._top = top
-
-        self._centre_node = Node(
-            config_file = self.config_file,
-            feature = node_feature,
-            hex_coord_system = hex_coord_system,
-            hex_coord = hex_centre_coord,
-            cartesian_coord_vector = self._hex_coord_to_cartesian(hex_centre_coord)
-            )
-        self._allocate_hex_coord(hex_centre_coord)
-
-        self._check_radius(outer_radius)
-        self._radius = outer_radius
-
+    def __post_init__(self):
+        # Attributes' sanity check
+        self._check_attributes()
+        # Computation of the useful dimensions of the hexagon, its width and height, based on its `top` and `radius`.
         self._compute_dimensions()
+        # Get the centre coordinate on the cartesian grid
+        self._hex_coord_to_cartesian()
+        # Create centre node
+        # Lazy imports to avoir Circular Import Error
+        from polyhex.objects.nodes import HexagonCentre
+        self.centre = HexagonCentre(self, self.hexagon_feature)
+        # Create vertices
+        self._create_vertices()
+        # Create edges
+        self._create_edges()
+        # Allocate spatial_key, an alias of hex_coord for Hexagons 
+        self.spatial_key = self.hex_coord
         
-        self._check_angle_orientation(angle_orientation)
-        self._angle_orientation = angle_orientation
-
-        self._create_vertices(vertex_feature)
-
-        self._create_edges(edge_feature)
-
-        # self._set_edges_hex_neighbours()
-        # self._set_edges_edge_neighbours()
-
-        self._compute_cartesian_coord()
-        self.free  = True
-        self.token = None
-
-    def _allocate_hex_coord(self, hex_coord):
-        if self.hex_coord_system in ['axial', 'offset', 'doubled']:
-            assert len(hex_coord) == 2
-            self._q = hex_coord[0]
-            self._r = hex_coord[1]
-            self._s = None
-        elif self.hex_coord_system == ['cube']:
-            assert len(hex_coord) == 3
-            self._q = hex_coord[0]
-            self._r = hex_coord[1]
-            self._s = hex_coord[2]
-        else:
-            raise NotImplementedError
+    ######### Checking the variables passed to the class constructor #########
+    ######### Called in the __post_init__ method #########
+    def _check_attributes(self):
+        self._check_hex_coord_system()
+        self._check_hex_centre_coord()
+        self._check_top()
+        self._check_vertex_orientation()
+        self._check_assets()
     
-    def _check_angle_orientation(self, angle_orientation:str):
-        assert angle_orientation == 'clockwise' or angle_orientation == 'counterclockwise', f"The angle orientation of an hexagon can only be 'clockwise' or 'counterclockwise', got {angle_orientation}"
+    def _check_vertex_orientation(self):
+        assert self.vertex_orientation == 'clockwise' or  self.vertex_orientation == 'counterclockwise', f"The angle orientation of an hexagon can only be 'clockwise' or 'counterclockwise', got { self.vertex_orientation}"
 
-    def _check_hex_centre_coord(self, coordinates:List[int]):
+    def _check_hex_centre_coord(self):
         if self.hex_coord_system in ['offset', 'axial', 'doubled']:
-            assert len(coordinates) == 2
+            assert len(self.hex_coord) == 2
+            self.q = self.hex_coord[0]
+            self.r = self.hex_coord[1]
         else:
-            assert len(coordinates) == 3
-
-        assert all(isinstance(item, int) for item in coordinates)
+            assert len(self.hex_coord) == 3
+            self.q = self.hex_coord[0]
+            self.r = self.hex_coord[1]
+            self.s = self.hex_coord[2]
     
-    def _check_hex_coord(self, hex_coord_system):
-        assert hex_coord_system in ['offset', 'cube', 'axial', 'doubled']
-        if hex_coord_system != 'axial':
-            raise NotImplementedError
+    @hex_coord_system_dependent
+    def _check_hex_coord_system(self):
+        pass
 
-    def _check_top(self, top:str):
-        assert top == 'flat' or top == 'pointy', f"The top of an hexagon can only be 'flat' or 'pointy', got {top}"
-        if top == 'flat':
-            raise NotImplementedError
+    @top_dependent
+    def _check_top(self):
+        pass
+        
+    def _check_assets(self,):
+        assert 'render' in  self.assets, "Please provide a `render` dict"
+        assert 'compatibility' in  self.assets, "Please provide a `compatibility` dict"
 
-    def _check_radius(self, radius: float):
-        assert isinstance(radius, (float, int)), f"The outer radius of the hexagon must be defined as an int or a float, got {type(radius)}"
-
+    @top_dependent
     def _compute_dimensions(self):
-        if self.top == 'flat':
-            raise NotImplementedError
-            self._height = math.sqrt(3) * self.radius
-            self._width  = 2* self.radius
-
-        elif self.top == 'pointy':
-            self._height = 2 * self.radius
-            self._width  = math.sqrt(3) * self.radius
-            self._min_h = self.radius /2
-            self._min_w  = self._width
-        else:
-            raise ValueError
-        
-    def _compute_cartesian_coord(self):
-        # centre_node
-        self.centre_node.cartesian_coord = np.einsum('i,i->i',self.centre_node.cartesian_coord_vector, self.min_dims)
-            
-        for i in range(6):
-            v = self.get_vertex(i)
-            v.cartesian_coord = np.einsum('i,i->i', v.cartesian_coord_vector, self.min_dims)
-        
-    def _vertex_coord_factory(self):
-        centre_node_coord_vector = self.centre_node.cartesian_coord_vector
-        cx = centre_node_coord_vector[0]
-        cy = centre_node_coord_vector[1]
-        vertex_coords_vec = []
         if self.top == 'pointy':
-            if self.angle_orientation == 'clockwise':
-                vertex_coords_vec.append((cx, cy+2))
-                vertex_coords_vec.append((cx+1, cy+1))
-                vertex_coords_vec.append((cx+1, cy-1))
-                vertex_coords_vec.append((cx, cy-2))
-                vertex_coords_vec.append((cx-1, cy-1))
-                vertex_coords_vec.append((cx-1, cy+1))
-                
-            elif self.angle_orientation == 'counterclockwise':
-                raise NotImplementedError
+            self.height = 2 * self.radius
+            self.width  = math.sqrt(3) * self.radius
+            self.min_h  = self.radius /2
+            self.min_w  = self.width  
+    
+    @hex_coord_system_dependent
+    @top_dependent
+    def _hex_coord_to_cartesian(self):
+        if self.hex_coord_system == 'axial' and self.top == 'pointy':
+            self.x = 2*self.q + self.r
+            self.y = -3*self.r        
+    
+    @top_dependent
+    @vertex_orientation_dependent
+    def _vertex_coord_factory(self):       
+        if self.top == 'pointy' and self.vertex_orientation == 'clockwise':
+                return [
+                    (self.x,   self.y+2),
+                    (self.x+1, self.y+1),
+                    (self.x+1, self.y-1),
+                    (self.x,   self.y-2),
+                    (self.x-1, self.y-1),
+                    (self.x-1, self.y+1)
+                ]
+    
+    @staticmethod
+    def _parse_feature(feature):
+        if isinstance(feature, (int, str, float, complex)):
+            feature = [feature for _ in range(6)]
+        elif isinstance(feature, (tuple, List)):
+            if len(feature) == 1:
+                feature = replicate_vector(feature, 6)
+            elif len(feature) == 6:
+                pass
+            else:
+                raise ValueError(f'Length of feature can only be 1 or 6, got {len(feature)}')
         else:
-            raise ValueError
-        return vertex_coords_vec
+            raise NotImplementedError(f'Currently, only int, str, float, complex, tuple and list objects are supported, got {type(feature)}') 
+        return feature
 
-    def _create_vertices(self, vertex_feature):
-        if len(vertex_feature) == 1:
-            vertex_feature = replicate_vector(vertex_feature, 6)
-        elif len(vertex_feature) == 6:
-            pass
-        else:
-            raise ValueError(f'Length of vertex_feature can only be 1 or 6, got {len(vertex_feature)}')
-
-        vertex_coords = self._vertex_coord_factory()
-        self._vertices = {
-                    i : Node(
-                        config_file=self.config_file,
-                        feature = None,
-                        cartesian_coord_vector = vertex_coords[i]
-                    ) for i in range(6)
-                }  
+    def _create_vertices(self):
+        # Lazy import 
+        from polyhex.objects.nodes import HexagonVertex
+        vertex_features = self._parse_feature(self.vertex_feature)
+        vertex_coords  = self._vertex_coord_factory()
+        self.vertices_list = []
+        self.vertices_dict = {}
+        for index, (coordinates, feature) in enumerate(zip(vertex_coords, vertex_features)):
+            vertex = HexagonVertex(self, coordinates, index, feature)
+            self.vertices_dict[vertex.spatial_key] = vertex
+            self.vertices_list.append(vertex)
         
-    def _create_edges(self, edge_feature):
-        if len(edge_feature) == 1:
-            edge_feature = replicate_vector(edge_feature, 6)
-        elif len(edge_feature) == 6:
-            pass
-        else:
-            raise ValueError(f'Length of edge_feature {edge_feature} can only be 1 or 6, got {len(edge_feature)}')
-        self.edges = {}
-        self.edges_to_feature = {}
-        self.edges_to_adjency = {}
-        self.feature_to_edges = defaultdict(list)
-        for i in range(6):
-            feature = edge_feature[i]
-            edge = Edge(
-                    vertex_0 = self.get_vertex(i), 
-                    vertex_1 = self.get_vertex((i+1)%6),
-                    feature = feature,
-                    index = i,
-                    config_file=self.config_file,
-                    hexagon=self
-                    )
-            self.edges[i] = edge
-            self.edges_to_adjency[edge.spatial_key] = ADJENCY_TO_ROTATIONS_FUNCTIONS[i]
-            # Map the key to the feature
-            self.edges_to_feature[edge.key] = feature
-            # Map the feature to the keys
-            self.feature_to_edges[feature].append(edge.key)
-
-    def _hex_coord_to_cartesian(self, hex_coord):
-        if self.hex_coord_system == 'axial':
-            assert len(hex_coord) == 2, f"For the axial coordinate system, two coordinates are requires, got {len(hex_coord)}"
-            x, y = self._axial_to_cartesian(
-                q=hex_coord[0],
-                r=hex_coord[1]
+    def _create_edges(self):
+        edge_features = self._parse_feature(self.edge_feature)
+        self.edges_list = []
+        self.edges_dict = {}
+        self.edges_to_rotations = {}
+        from polyhex.objects.edges import HexagonEdge
+        for index, feature in enumerate(edge_features):
+            edge = HexagonEdge(
+                self, 
+                self.vertices_list[index], 
+                self.vertices_list[(index+1)%6],
+                index, 
+                feature
                 )
-        else:
-            raise NotImplementedError(f'Not implemented for {self.hex_coord_system}')
-        return (x,y)
+            self.edges_dict[edge.spatial_key] = edge
+            self.edges_list.append(edge)
+            self.edges_to_rotations[edge.spatial_key] = ADJENCY_TO_ROTATIONS_FUNCTIONS[index]
+    
+    ######### Properties #########
+    @property
+    def adjency(self) -> List[Tuple[int]]:
+        """Get a hexagon adjency, i.e the coordinates of neighbouring hexagons.
 
-    def _axial_to_cartesian(self, q:int,r:int):
-        assert isinstance(q, int)
-        assert isinstance(r, int)
+        Raises:
+            NotImplementedError: is only implemented for the `axial` coordinates system.
+            NotImplementedError: is only implemented for the `clockwise` vertex ordering.
+
+        Returns:
+            List[Tuple[int]] : [(coord_hex_0), ..., (coord_hex_5)]
+        """
+        if self.hex_coord_system == 'axial':
+            if self.vertex_orientation == 'clockwise':
+                return [
+                    (self.q+1, self.r-1),
+                    (self.q+1, self.r  ),
+                    (self.q  , self.r+1),
+                    (self.q-1, self.r+1),
+                    (self.q-1, self.r  ),
+                    (self.q  , self.r-1)
+                    ]
+            else:
+                raise NotImplementedError(f'The `adjency` attribute is not implemented for {self.vertex_orientation}. Please use `clockwise` orientation instead.')
+        else:
+            raise NotImplementedError(f'The `adjency` attribute is not implemented for {self.hex_coord_system}. Please use `axial` coordinate system instead.')
         
-        if self.top == 'pointy':
-            x = 2*q + r
-            y = -3*r
-        elif self.top == 'flat':
-            raise NotImplementedError
-        else:
-            raise ValueError(f'{self.top=}')
-        
-        return x, y 
+    @property
+    def encoding(self):
+        return self.centre.encoding
 
-    # @hex_coord_system_dependent
-    @property
-    def adjency(self):
-        if self.angle_orientation == 'clockwise':
-            q = self.q
-            r = self.r
-            return [(q+1, r-1),(q+1, r),(q, r+1),
-                (q-1, r+1),(q-1, r),(q, r-1)]
-        else:
-            raise NotImplementedError
-
-    @property
-    def angle_orientation(self):
-        return self._angle_orientation
-    
-    @property
-    def centre_node(self):
-        return self._centre_node
-    
-    @property
-    def feature(self):
-        return self.centre_node.feature
-    
-    @property
-    def hex_coord(self):
-        if self.hex_coord_system =='axial':
-            return (self.q, self.r)
-        else:
-            raise NotImplementedError
-    
-    @property
-    def hex_coord_system(self):
-        return self._hex_coord_system
-    
-    @property
-    def height(self):
-        return self._height
-    
-    @property
-    def min_h(self):
-        return self._min_h
-    
-    @property
-    def min_dims(self):
-        return [self.min_w, self.min_h]
-    
-    @property
-    def min_w(self):
-        return self._min_w
-    
-    @property
-    def q(self):
-        return self._q
-    
-    @q.setter
-    def q(self, value):
-        self._q = value
-
-    @property
-    def r(self):
-        return self._r
-    
-    @r.setter
-    def r(self, value):
-        self._r = value
-    
-    @property
-    def radius(self):
-        return self._radius
-    
-    @property
-    def s(self):
-        return self._s
-    
-    @s.setter
-    def s(self, value):
-        self._s = value
-    
-    @property
-    def top(self):
-        return self._top
-    
-    @property
-    def vertices(self):
-        return self._vertices
-
-    @property
-    def width(self):
-        return self._width
-        
+    ######### Methods #########    
     def add_token(self, token):
+        raise NotImplementedError
         assert self.free, f'The hexagon ({self.q}, {self.r}) is occupied.'
         assert self.centre_node.free, f'The centre node of the hexagon ({self.q}, {self.r}) is occupied.'
         assert self.feature in self.config_file['compatibility']["token_to_habitat"][token]
@@ -337,82 +222,73 @@ class Hexagon(object):
                 and self.hex_coord_system == other.hex_coord_system 
                 and self.radius == other.radius
                 and self.top == other.top 
-                and self.angle_orientation == other.angle_orientation
+                and self.vertex_orientation == other.vertex_orientation
                 )         
     
-    def get_vertex(self, index:int):
-        assert isinstance(index, int), f'{type(index)}'
-        assert 0 <= index <= 5
-        return self.vertices[index]
+    @top_dependent
+    @vertex_orientation_dependent
+    def get_vertex_adjency(self, vertex):        
+        if self.vertex_orientation == 'clockwise' and self.top == 'pointy':
+            x, y = self.vertices_list[vertex.index].x, self.vertices_list[vertex.index].y
+            if vertex.index % 2 == 0:
+                adj = [(x, y+2), (x+1, y-1), (x-1, y-1)]
+            else:
+                adj = [(x+1, y+1), (x, y-2), (x-1, y+1)]
+        assert len(adj) == 3
+        return adj
+        
+    def get_edge_adjency(self, edge):
+        # 1 We get the edge's index and define the adjency list
+        edge = self.edges_list[edge.index]
+        adj = []
+        # We iterate on the 
+        for root in [edge.start, edge.end]:
+            adjency = self.get_vertex_adjency(root)
+            for coord in adjency:
+                candidate_key = frozenset(
+                    (root.spatial_key, coord))
+                if candidate_key!=edge.spatial_key:
+                    adj.append(candidate_key)
+        assert len(adj) == 4
+        return adj
+
+
+    # def get_edge_hexagon_adjency(self, index:int):
+    #     """This function is used to determine what are the coordinates of the adjacent hexagon to a given edge index
+    #     """
+    #     return self.adjency[index]
     
-    def get_edge(self, index:int):
-        assert isinstance(index, int), f'{type(index)}'
-        assert 0 <= index <= 5
-        return self.edges[index]    
+    def render(self, axes):
+        axes = self.centre.render(axes)
+        for edge in self.edges_list:
+            axes = edge.render(axes)
+        return axes
 
-    def get_edge_adjency(self, index:int):
-        return self.adjency[index]
-    
-    def get_graph_nodes(self):
-        return [edge.encoding for edge in self.edges.values()]
+    def draw(self, buffer_object):
+        fig = plt.figure()
+        axes = fig.gca()
+        axes.axis('off')
+        axes = self.render(axes)
+        plt.savefig(buffer_object, format='png', dpi=150, bbox_inches='tight')
+        plt.clf()
+        plt.close(fig)
 
-    def get_graph_edges(self):
-        starts = []
-        ends   = []
-        edge_attrs = []
-        for i in range(6):
-            for j in range(6):
-                if i!=j:
-                    starts.append(i)
-                    ends.append(j)
-                    edge_attrs.append(1 if self.edges[i].feature == self.edges[j].feature else 0)
-        return  [starts, ends, edge_attrs]
+    def distance(self, other, kwd='path'):
+        assert isinstance(other, Hexagon)
+        if kwd == 'path':
+            raise NotImplementedError
+        elif kwd == 'euclidian':
+            return distance.euclidean(self.spatial_key, other.spatial_key)
 
-    def draw(self, axes = None,
-        scale = False, buffer=None
-        ):
-        if buffer is not None:
-            fig = plt.figure()
-            axes = fig.gca()
-            axes.axis('off')
-            axes = self.centre_node.draw(
-                axes, 
-                scale=scale
-                )
-            for i in range(6):
-                axes = self.get_edge(i).draw(
-                    axes,
-                    scale=scale
-                    )
-            plt.savefig(buffer, format='png', dpi=150, bbox_inches='tight')
-            plt.clf()
-            plt.close(fig)
-        else:
-            axes = self.centre_node.draw(
-                axes, 
-                scale=scale
-                )
-            for i in range(6):
-                axes = self.get_edge(i).draw(
-                    axes,
-                    scale=scale
-                    )
-            return axes
-
+    ######### Dunder methods #########
     def __str__(self):
-        # centre_node
-        print_str = f'centre_node = ({self.centre_node})\n'
-        return print_str
-    
-    def __repr__(self):
-        return f'{self.centre_node.hex_coord}'
+        return f'{self.hex_coord} \n'
     
     def __eq__(self, other):
-        return self.is_compatible(other) and self.centre_node.equal(other.centre_node, 'hex_coord')
+        return self.is_compatible(other) and self.centre == other.centre
     
     def __hash__(self):
         return hash(
-                (
-                type(self), self.centre_node
-                )
+                (type(self), self.centre)
             )
+    

@@ -1,12 +1,19 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Tuple, List
 
-from polyhex.objects.new_hexagons import Hexagon
-from polyhex.objects.new_nodes import HexagonVertex
-from polyhex.objects.new_edges import HexagonEdge
-from polyhex.objects.new_polyhexes import Polyhex
+from polyhex.objects.hexagons import Hexagon
+from polyhex.objects.nodes import HexagonVertex
+from polyhex.objects.edges import HexagonEdge
+from polyhex.objects.polyhexes import Polyhex
 
-__all__ = ('Graph', 'HexagonGraph', 'VertexGraph', 'EdgeGraph', 'EdgeBorderGraph', 'HexagonBorderGraph')
+__all__ = (
+    'Graph', 
+    'HexagonGraph', 
+    'VertexGraph', 
+    'EdgeGraph', 
+    'EdgeBorderGraph', 
+    'HexagonBorderGraph'
+    )
 
 class Graph(ABC):
     def __init__(self, name : str):
