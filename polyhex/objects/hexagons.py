@@ -149,11 +149,10 @@ class Hexagon(object):
         # Lazy import 
         from polyhex.objects.nodes import HexagonVertex
         vertex_features = self._parse_feature(self.vertex_feature)
-        vertex_coords  = self._vertex_coord_factory()
         self.vertices_list = []
         self.vertices_dict = {}
-        for index, (coordinates, feature) in enumerate(zip(vertex_coords, vertex_features)):
-            vertex = HexagonVertex(self, coordinates, index, feature)
+        for index, feature in enumerate(vertex_features):
+            vertex = HexagonVertex(self, index, feature)
             self.vertices_dict[vertex.spatial_key] = vertex
             self.vertices_list.append(vertex)
         

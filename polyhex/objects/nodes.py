@@ -1,7 +1,11 @@
 """Base module for the nodes of a polyhex"""
+
+# pylint: disable=line-too-long
+# pylint: disable=possibly-used-before-assignment
+
 from abc import ABC
 from dataclasses import dataclass
-from typing import Tuple
+from typing import List
 from math import sqrt
 
 from numpy.typing import ArrayLike
@@ -13,7 +17,8 @@ from matplotlib.artist import Artist
 from polyhex.objects.hexagons import Hexagon
 from polyhex.objects.decorators import top_dependent
 
-__all__ = ('HexagonCentre', 'HexagonVertex')
+__all__ = ("HexagonCentre", "HexagonVertex")
+
 
 @dataclass
 class Node(ABC):
@@ -26,6 +31,7 @@ class Node(ABC):
         free (bool): Identifies if there is something on the node. Defaults to False.
         token (ArrayLike): Identifies what is on the node. Defaults to None
     """
+
     # pylint: disable=too-many-instance-attributes
     hexagon: Hexagon
     feature: ArrayLike = "placeholder"
@@ -47,36 +53,51 @@ class Node(ABC):
             ]
         else:
             raise NotImplementedError
-        
+
     @property
-    def encoding(self):
+    def encoding(self) -> List:
+        """The encoding is an attribute of a node: it turns the string representation of the `feature` and the `token` into a list.
+
+        Returns:
+            (list): vector encoding of the node's representation
+        """
         return [
-            self.encoding_assets['feature'][self.feature], 
-            self.encoding_assets['token'][self.token]
-            ]
+            self.encoding_assets["feature"][self.feature],
+            self.encoding_assets["token"][self.token],
+        ]
 
     @property
     def name(self):
+        """The name attribute is a string representation of the class' name. Example: HexagonCentre, HexagonVertex...
+
+        Returns:
+            _type_: _description_
+        """
         return self._name
 
     @name.setter
     def name(self, name):
+        """setter method for the name attribute"""
         self._name = name
 
     @property
     def x(self):
+        """The x attribute is the second coordinate of the node on a cartesian grid."""
         return self._x
 
     @x.setter
     def x(self, x):
+        """setter method for the x attribute"""
         self._x = x
 
     @property
     def y(self):
+        """The y attribute is the second coordinate of the node on a cartesian grid."""
         return self._y
 
     @y.setter
     def y(self, y):
+        """setter method for the y attribute"""
         self._y = y
 
     def draw(self, save=True):
@@ -97,11 +118,24 @@ class Node(ABC):
             plt.show(axes)
 
     def _render(self, axes: Artist):
+        """The `_render` method is a private method of the `Node` abstract class. It differs from the `render` public method as it is only implemented in the children classes.
+        Args:
+            axes (Artist): matplotlib.Artist on which to draw
+
+        Raises:
+            NotImplementedError: It is not implement for the abstract `Node` class.
+        """
         raise NotImplementedError(
-            "The _render() Method is not implemented for the  Node class."
+            "The _render() Method is not implemented for the abstract `Node` class."
         )
 
     def render(self, axes: Artist, **kwargs):
+        """The `render` method is a public method of the `Node` abstract class.
+
+        Args:
+            axes (Artist): matplotlib.Artist on which to draw
+            kwargs : keyword dict that can replace the default rendering options defined in the assets.
+        """
         if not kwargs:
             p = self.render_assets["feature"][f"{self.token}"]
             axes = self._render(axes, **p)
@@ -109,14 +143,38 @@ class Node(ABC):
             axes = self._render(axes, **kwargs)
         return axes
 
-    def add_token(self, new_token):
+    def add_token(self, new_token: str):
+        """Method to add a token on a node.
+
+        Args:
+            new_token (str): str identifier of the token. Think 'settlement' in CATAN.
+        """
         assert (
             new_token in self.compat_assets[self.feature]
         ), f"The token {new_token} is not compatible with the slot {self.feature} for {self.name} nodes"
         self.token = new_token
 
+
 class HexagonCentre(Node):
+    """
+    ``HexagonCentre`` class which represents the centre of an hexagon
+    It is created using:
+        an hexagon (``polyhex.Hexagon``),
+        a feature (``ArrayLike``)
+    """
+
     def __init__(self, hexagon: Hexagon, feature: ArrayLike = "placeholder"):
+        """Constructor of the ``HexagonCentre`` class
+
+        Notes:
+            The constructor adds the following attributes to the Node class
+            [x,y] : defined as the cartesian coordinates of the ``HexagonCentre``
+            spatial_key : defined as the hex coordinates of the ``HexagonCentre``
+
+        Args:
+            hexagon (Hexagon): Hexagon the ``HexagonCentre`` is the centre of.
+            feature (ArrayLike, optional): Feature of the ``HexagonCentre``
+        """
         self.hex_coordinates = hexagon.hex_coord
         self.x, self.y = hexagon.x, hexagon.y
         self.name = "HexagonCentre"
@@ -145,27 +203,66 @@ class HexagonCentre(Node):
 
     def __repr__(self):
         return f"{self.name} : {self.spatial_key}"
-    
+
     def __hash__(self):
         return hash((type(self), self.spatial_key))
-    
-    ### Public method ### 
-    def distance(self, other, kwd='euclidian'):
+
+    ### Public method ###
+    def distance(self, other, kwd="euclidian"):
+        """Method to compute the distance between two ``HexagonCentre``
+
+        Args:
+            other (_type_): other ``HexagonCentre``
+            kwd (str, optional): Identifier of the distance. Defaults to "euclidian".
+
+        Raises:
+            NotImplementedError: This is currently not implemented for any distance but the `euclidian`.
+
+        Returns:
+            np.ndarray: float distance value
+        """
         assert isinstance(other, HexagonCentre)
-        if kwd == 'euclidian':
+        if kwd == "euclidian":
             return distance.euclidean(self.hex_coordinates, other.hex_coordinates)
-        else:
-            raise NotImplementedError 
+
+        raise NotImplementedError(
+            f"The distance function for {self.name} is not implemented for distance keyword {kwd}. It can only be `euclidian`."
+        )
 
 
 class HexagonVertex(Node):
+    """
+    ``HexagonVertex`` class which represents the centre of an hexagon
+    It is created using:
+        an hexagon (``polyhex.Hexagon``)
+        the index of the vertex on the considered ``Hexagon``
+        a feature (``ArrayLike``)
+    It defines an extra `feature_key` attribute that combines the spatial and feature attributes of the HexagonVertex.
+
+    Note:
+        Unlike ``HexagonCentre``, vertices can spatially coincide hence they need more information to be distinguished from one another.
+    """
+
     def __init__(
         self,
         hexagon: Hexagon,
-        cartesian_coordinates: Tuple[int] = (0, 0),
         index: int = 0,
         feature: str = "placeholder",
     ):
+        """Constructor of the ``HexagonVertex`` class
+
+        Notes:
+            The constructor adds the following attributes to the Node class
+            [x,y] : defined as the cartesian coordinates of the ``HexagonVertex``
+            spatial_key : defined as the cartesian coordinates of the ``HexagonVertex``
+            feature_key : combines the spatial and feature attributes of the HexagonVertex.
+
+        Args:
+            hexagon (Hexagon): Hexagon the ``HexagonVertex`` is part of.
+            feature (ArrayLike, optional): Feature of the ``HexagonVertex``
+            index (int) : the index of the vertex in the considered Hexagon
+        """
+        cartesian_coordinates = hexagon._vertex_coord_factory()[index]
         self.x, self.y = cartesian_coordinates
         self.index = index
         self.name = "HexagonVertex"
@@ -198,11 +295,25 @@ class HexagonVertex(Node):
 
     def __repr__(self):
         return f"{self.name} : {self.feature_key}"
-    
-    ### Public method ### 
-    def distance(self, other, kwd = 'euclidian'):
+
+    ### Public method ###
+    def distance(self, other, kwd="euclidian"):
+        """Method to compute the distance between two ``HexagonVertex``
+
+        Args:
+            other (_type_): other ``HexagonVertex``
+            kwd (str, optional): Identifier of the distance. Defaults to "euclidian".
+
+        Raises:
+            NotImplementedError: This is currently not implemented for any distance but the `euclidian`.
+
+        Returns:
+            np.ndarray: float distance value
+        """
         assert isinstance(other, HexagonVertex)
-        if kwd == 'euclidian':
+        if kwd == "euclidian":
             return distance.euclidean(self.spatial_key, other.spatial_key)
-        else:
-            raise NotImplementedError
+
+        raise NotImplementedError(
+            f"The distance function for {self.name} is not implemented for distance keyword {kwd}. It can only be `euclidian`."
+        )
