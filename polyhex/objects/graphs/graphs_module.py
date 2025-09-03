@@ -53,14 +53,6 @@ class Graph(ABC):
             "The `append` function is not implemented for the abstract `Graph` class"
         )
 
-    @abstractmethod
-    def remove(self):
-        """Remove method for the Graph"""
-        raise NotImplementedError(
-            "The `remove` function is not implemented for the abstract `Graph` class"
-        )
-
-
 class VertexGraph(Graph):
     """
     Graph of polyhex vertices
