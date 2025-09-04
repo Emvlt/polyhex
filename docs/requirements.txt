@@ -11,3 +11,9 @@ myst-parser
 
 # Install the project itself so autodoc works
 -e .
+
+matplotlib
+numpy
+scipy
+torch
+torch_geometric
