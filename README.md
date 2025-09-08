@@ -1,4 +1,4 @@
-# Project Title
+# Polyhex
 
 [![License: Apache](https://img.shields.io/badge/License-Apache-yellow.svg)](https://opensource.org/license/apache-2-0)
 
@@ -27,7 +27,7 @@ You can then have a look at the `examples` folder.
 
 ## 📓✏️ Documentation
 
-Work in progress
+Visit the documentation on [Polyhex's ReadTheDocs](https://polyhex.readthedocs.io/en/latest/)
 
 ## 🗺️ Roadmap
 
