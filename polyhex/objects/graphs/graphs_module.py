@@ -54,6 +54,9 @@ class Graph(ABC):
         raise NotImplementedError(
             "The `append` function is not implemented for the abstract `Graph` class"
         )
+    
+    def sample(self, random_generator):
+        return random_generator.choice(list(self.nodes.values()))
 
 class VertexGraph(Graph):
     """
@@ -129,7 +132,9 @@ class HexagonGraph(Graph):
         Args:
             hexagon (Hexagon): Hexagon to append to the graph
         """
-        coord = hexagon.hex_coord
+        coord = hexagon.spatial_key
+        if coord in self.nodes:
+            raise RuntimeError(f'There is already an hexagon at coordinates {coord}, the hexagons of a polyhex cannot overlap')
         self.nodes[coord] = hexagon
         self.node_to_index[coord] = self.n_nodes
         self.weights[coord] = []
