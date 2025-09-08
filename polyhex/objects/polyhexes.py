@@ -99,9 +99,7 @@ class Polyhex:
         assert isinstance(n_hexagons, int)
         polyhex._create_from_list([Hexagon()], hypergraph)
         for _ in range(n_hexagons - 1):
-            hexagon = polyhex.random_generator.choice(
-                list(hypergraph["HexagonBorderGraph"].nodes.values())
-            )
+            hexagon = hypergraph["HexagonBorderGraph"].sample(polyhex.random_generator)
             polyhex.append_hex(hexagon, hypergraph)
         return polyhex
 
